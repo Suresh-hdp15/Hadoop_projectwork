@@ -1,0 +1,53 @@
+Hello Hadoop, configuring 1.2.1 on our systems for earlier tasks startup.....
+*************   STAND-ALONE MODE Installation ***************
+1) Create a VM (Ubuntu 64-bit, HDD:30G, RAM:3GB)
+2) Install Ubuntu Server OS ( Ensure OpenSSH is selected )
+3) Update the system packages
+	sudo apt-get update ( Internet Connection is mandatory )
+4) If incase you miss ssh installation, install using
+	sudo apt-get install openssh-server ( Internet Connection is mandatory )
+5) Install Java8 version
+	sudo apt-get install openjdk-8-jdk
+  sudo add-apt-repository ppa:webupd8team/java
+	sudo apt-get update
+    Incase you are interested for Oracle Java 8,
+		sudo apt-get install oracle-java8-installer
+6) Verify whether Java is installed successfully or not
+	java -version
+
+Done !  
+
+Standalone mode installation
+==============================
+
+Step 1: Download the tar file from the official website( http://hadoop.apache.org)
+     	Website > Releases> Apache Release Archive > stable1 > hadoop-1.2.1.tar.gz           
+
+Step 2: Extract the tar file
+	tar -xvzf hadoop-1.2.1.tar.gz
+
+Step 3: Rename the extracted folder
+ee	mv hadoop-1.2.1 hadoop
+	
+Step 4: Inform the system about the framework
+	nano .bashrc
+ 	
+	At the end of the line type the following:
+
+	export HADOOP_PREFIX=/home/suresh/hadoop
+	export PATH=$PATH:$HADOOP_PREFIX/bin
+
+Step 5: Update system about new system level entries
+
+	exec bash
+
+Step 6: Inform Hadoop where is Java
+
+	nano /home/hadoop123/hadoop/conf/hadoop-env.sh
+ 
+	Uncomment and edit the line as shown below:
+
+	export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
+
+Hadoop is successfully installed in standalone mode.
+
