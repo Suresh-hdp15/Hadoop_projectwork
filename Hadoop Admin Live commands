@@ -1,0 +1,105 @@
+dfsadmin / setQuota   ----> using dfsadmin, we can create the quota (no.of. Files) in hdfs location
+"hadoop dfsadmin -setQuota 100 /user/suresh/Tempdir
+"
+
+fs / -count    ------> using count option, we can see the no.of. Files created (i.e.100) and nof.of. Directories and no.of.files present inside the dir.
+" hadoop fs -count -q /user/suresh/Tempdir
+         100      97            none        inf      1      2                152 hdfs://192.168.177.130:9000/user/suresh/Tempdir
+"
+
+dfsadmin / setSpaceQuota  -------> using dfsadmin, we can create the space quota (directory size) in hdfs location
+hadoop dfsadmin -setSpaceQuota 1G /user/suresh/hdp_user
+
+fs / -count ------> using count option, we can see the allocated memory for that directory.
+"hadoop fs -count -q /user/suresh/hdp_user
+ none             inf      1073741824      1072778995        1       1        962829 hdfs://192.168.177.130:9000/user/suresh/hdp_user
+"
+
+dfsadmin / report  ----> This will give configuration details, DFS details and datanodes details
+"hadoop dfsadmin -report
+Configured Capacity: 28368367616 (26.42 GB)
+Present Capacity: 20820332544 (19.39 GB)
+DFS Remaining: 20730658816 (19.31 GB)
+DFS Used: 89673728 (85.52 MB)
+DFS Used%: 0.43%
+Under replicated blocks: 2
+Blocks with corrupt replicas: 0
+Missing blocks: 0
+
+-------------------------------------------------
+Datanodes available: 1 (1 total, 0 dead)
+
+Name: 192.168.177.130:50010
+Decommission Status : Normal
+Configured Capacity: 28368367616 (26.42 GB)
+DFS Used: 89673728 (85.52 MB)
+Non DFS Used: 7548035072 (7.03 GB)
+DFS Remaining: 20730658816(19.31 GB)
+DFS Used%: 0.32%
+DFS Remaining%: 73.08%
+Last contact: Tue Nov 21 03:21:24 PST 2017
+"
+
+hadoop dfsadmin -safemode enter  --->   The admin entered into safe mode(super user),cannot do data deletion, write or corrupt operations.
+Safe mode is ON
+
+hadoop fs -rm /user/suresh/Tempdir/input.txt
+rm: org.apache.hadoop.hdfs.server.namenode.SafeModeException:
+Cannot delete /user/suresh/Tempdir/input.txt. Name node is in safe mode.
+
+hadoop dfsadmin -safemode leave    --->  Leaving from safe mode..
+Safe mode is OFF
+
+Heartbeating  ----> Every 10mts, the data node will communicate to name node that it's in active status (same TT communicates to JT) 
+I/P ---> hadoop dfsadmin -metasave filename
+Created file filename on server hdfs://192.168.177.130:9000
+
+26 files and directories, 11 blocks = 37 total Live Datanodes: 1 Dead Datanodes: 0 Metasave: Blocks waiting for replication: 2 /user/suresh/home/suresh/hadoop/hdfs/mapred/staging/suresh/.staging/job_201711192244_0001/job.jar: blk_-6350874767163844446_1012 (replicas: l: 1 d: 0 c: 0 e: 0) 192.168.177.130:50010 : /user/suresh/home/suresh/hadoop/hdfs/mapred/staging/suresh/.staging/job_201711192244_0002/job.jar: blk_-5767281487259892323_1014 (replicas: l: 1 d: 0 c: 0 e: 0) 
+192.168.177.130:50010 : Metasave: Blocks being replicated: 0 
+Metasave: Blocks 0 waiting deletion from 0 datanodes 
+Metasave: Number of datanodes: 1 192.168.177.130:50010 IN 28368367616(26.42 GB) 89673728(85.52 MB) 0.32% 20731482112(19.31 GB) Tue Nov 21 03:40:52 PST 2017 
+
+Balancer -----> Tools to balancer the cluster (i.e.Hard disk) across the datanodes (i.e. It  stores the data in all the hard disks to balance the free space equally)
+I/P ---> hadoop balancer
+Time Stamp               Iteration#  Bytes Already Moved  Bytes Left To Move  Bytes Being Moved
+17/11/21 07:01:03 INFO net.NetworkTopology: Adding a new node: /default-rack/192.168.177.130:50010
+17/11/21 07:01:03 INFO balancer.Balancer: 0 over utilized nodes:
+17/11/21 07:01:03 INFO balancer.Balancer: 1 under utilized nodes:  192.168.177.130:50010
+The cluster is balanced. Exiting...
+Balancing took 1.469 seconds"
+
+
+fsck   -----> It diagonse an health-checkup to the file system, about to find missing files or blocks in data node
+I/P --> "hadoop fsck /user/suresh/hdp_user
+FSCK started by suresh from /127.0.0.1 for path /user/suresh/hdp_user at Tue Nov 21 01:57:18 PST 2017
+.....Status: HEALTHY
+ Total size: 88595865 B
+ Total dirs: 1
+ Total files: 5
+ Total blocks (validated): 6 (avg. block size 14765977 B)
+ Minimally replicated blocks: 6 (100.0 %)
+ Over-replicated blocks: 0 (0.0 %)
+ Under-replicated blocks: 0 (0.0 %)
+ Mis-replicated blocks:  0 (0.0 %)
+ Default replication factor: 1
+ Average block replication: 1.0
+ Corrupt blocks:  0
+ Missing replicas:  0 (0.0 %)
+ Number of data-nodes:  1
+ Number of racks:  1
+FSCK ended at Tue Nov 21 01:57:18 PST 2017 in 25 milliseconds
+The filesystem under path '/user/suresh/hdp_user' is HEALTHY
+"
+
+
+
+
+
+
+
+
+
+
+
+
+
