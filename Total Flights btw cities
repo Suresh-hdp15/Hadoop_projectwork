@@ -1,0 +1,28 @@
+hdusr@khesh-virtual-machine:~$ hadoop fs -put /home/hdusr/Datas/airdata.txt /user/pigdata/airdata.txt
+put: org.apache.hadoop.hdfs.server.namenode.SafeModeException: Cannot create /user/pigdata/airdata.txt. Name node is in safe mode.
+
+hdusr@khesh-virtual-machine:~$ hadoop dfsadmin -safemode leave
+Safe mode is OFF
+hdusr@khesh-virtual-machine:~$ hadoop fs -put /home/hdusr/Datas/airdata.txt /user/pigdata/airdata.txt
+
+A = LOAD '/user/pigdata/airdata.txt' USING PigStorage ('\t') AS (origin:chararray, destination:chararray, origincity:chararray, destncity:chararray, passengers:int, seats:int, flights:int, distance:int, date:int, population:int);	
+
+grunt> Describe airline;
+airline: {origin: chararray,destination: chararray,origincity: chararray,destncity: chararray,passengers: int,seats: int,flights: int,distance: int,date: int,population: int}
+
+grunt> B = FOREACH airline GENERATE $0,$1,$6;
+grunt> C = GROUP B BY ($0,$1);
+grunt> D = FOREACH C GENERATE group,SUM(B.$2); 
+grunt> DUMP D;  
+
+
+STORE D INTO '/user/pigdata/output/pigop1/'; 
+
+o/p:
+****
+((EUG,RDM),45)
+((MFR,RDM),9)
+((MHK,AMW),1)
+((PDX,RDM),1024)
+((SEA,RDM),67)
+((origin,destination),)
