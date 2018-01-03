@@ -1,0 +1,42 @@
+:- To display active fights in USA&Canada:
+******************************************************************
+grunt> AIRLINE = LOAD '/user/pigdata/input/Airlines.txt' USING PigStorage ('\t') AS 
+>> (airline:chararray, name:chararray, alias:chararray, IATA:chararray, ICAO:chararray, 
+>> Country:chararray, active:chararray);
+grunt> Describe AIRLINE;
+AIRLINE: {airline: chararray,name: chararray,alias: chararray,IATA: chararray,ICAO: chararray,Country: chararray,active: chararray}
+
+grunt> A = FOREACH AIRLINE GENERATE $0,$1,$5,$6;
+grunt> B = FILTER A BY active == 'Y';
+grunt> Dump B;
+
+:-To display active flights only in USA:
+****************************************
+grunt> B = FILTER A BY (active == 'Y' and Country == 'USA');
+(AS,Alaska_Airlines,USA,Y)
+(AA,American_Airlines,USA,Y)
+(HA,Hawaiian_Airlines,USA,Y)
+(WN,Southwest_Airlines,USA,Y)
+(DL,Delta_Airlines,USA,Y)
+(UA,United_Airlines,USA,Y)
+(FX,FedEx Express,USA,Y)
+(EO,Express One International,USA,Y)
+(PO,Polar-Air_Cargo,USA,Y)
+(VX,Virgin_America,USA,Y)
+(C5,CommutAir,USA,Y)
+(EV,ExpressJet,USA,Y)
+(G7,GoJet_Airlines,USA,Y)
+(MQ,Envoy_Air,USA,Y)
+(QX,Horizon_Air,USA,Y)
+(YV,Mesa_Airlines,USA,Y)
+(PT,Piedmont_Airlines,USA,Y)
+(YX,Republic_Airline,USA,Y)
+(OO,SkyWest_Airlines,USA,Y)
+(BB,Seaborne_Airlines,USA,Y)
+(NC,Northern_Air-Cargo,USA,Y)
+(N8,National_Airlines,USA,Y)
+(CB,Kalitta Charters,USA,Y)
+(IF,IFL Group,USA,Y)
+(UJ,USA-Jet_Airlines,USA,Y)
+(9S,Southern_Air,USA,Y)
+(KI,Skyway Enterprises,USA,Y)
