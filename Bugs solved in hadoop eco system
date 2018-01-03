@@ -1,0 +1,33 @@
+Bug 1:
+hdusr@khesh-virtual-machine:~$ javac -cp $(hadoop classpath):$(hbase classpath) Tablecrea.java
+Tablecrea.java:8: error: cannot find symbol
+import org.apache.hadoop.hbase.TableName;
+                              ^
+  symbol:   class TableName
+  location: package org.apache.hadoop.hbase
+1 error
+
+Solution:
+Class name Table not in Hbase-0.94.15 version API not supporting this error occurs. Upgraded to newer version on Hbase and resolved it.
+
+Bug 2:
+Job Submission failed with exception 'java.io.IOException(Call to 192.168.177.144/192.168.177.144:9000 failed on local exception: java.net.NoRouteToHostException: No route to host)'
+FAILED: Execution Error, return code 1 from org.apache.hadoop.hive.ql.exec.mr.MapRedTask
+
+Solution:  Changed the IP address in LOAD command.
+LOAD DATA INPATH 'hdfs://192.168.177.146:9000/user/hive/wordset.txt' INTO TABLE book;
+
+Bug 3:
+FAILED: RuntimeException org.apache.hadoop.ipc.RemoteException: org.apache.hadoop.hdfs.server.namenode.SafeModeException: Cannot create directory /tmp/hive-hdusr/hive_2017-12-14_18-50-32_163_7886237205284398296-1. Name node is in safe mode.
+The reported blocks is only 0 but the threshold is 0.9990 and the total blocks 2709. Safe mode will be turned off automatically.
+
+Solution: Name node is in safe mode, so problem occurs in hive.
+Using dfsadmin - safemode, cross checked and fixed the issue.
+
+hdusr@khesh-virtual-machine:~$ hadoop dfsadmin -safemode get
+Safe mode is ON
+hdusr@khesh-virtual-machine:~$ hadoop dfsadmin -safemode leave
+Safe mode is OFF
+
+
+
