@@ -1,0 +1,100 @@
+flume.conf:-
+************
+TwitterAgent.sources = Twitter
+TwitterAgent.channels = MemChannel
+TwitterAgent.sinks = HDFS
+
+# For each one of the sources, the type is defined
+TwitterAgent.sources.Twitter.type = com.cloudera.flume.source.TwitterSource
+TwitterAgent.sources.Twitter.channels = MemChannel
+TwitterAgent.sources.Twitter.consumerKey = X2Bgkh623tGIj9qtOpC4XvWME
+TwitterAgent.sources.Twitter.consumerSecret =  CyWSHeYz1sQG3RhKvQrJrB0pDNTcMxRKgjGzRpwpNWJ1zceA1t
+TwitterAgent.sources.Twitter.accessToken =  942300060469018624-7s4YqhcGnPeKIzgs29GGa8lpLOW1EaP
+TwitterAgent.sources.Twitter.accessTokenSecret = kX0q7RRdPP0hnKxXT8l2kKoo4jIuHRFi8ZO0ZPq6iKNIe
+
+# The channel can be defined as follows.
+TwitterAgent.sources.Twitter.keywords = suresh, baggage, fares
+
+# Each sink's type must be defined	
+TwitterAgent.sinks.HDFS.channel = MemChannel
+TwitterAgent.sinks.HDFS.type = hdfs
+TwitterAgent.sinks.HDFS.hdfs.path = hdfs://localhost:9000/user/flume/tweets/
+TwitterAgent.sinks.HDFS.hdfs.fileType = DataStream
+TwitterAgent.sinks.HDFS.hdfs.writeFormat = Text
+TwitterAgent.sinks.HDFS.hdfs.batchSize = 10
+TwitterAgent.sinks.HDFS.hdfs.rollSize = 0
+TwitterAgent.sinks.HDFS.hdfs.rollCount = 10
+
+#Specify the channel the sink should use
+# Each channel's type is defined.
+TwitterAgent.channels.MemChannel.type = memory
+TwitterAgent.channels.MemChannel.capacity = 100
+
+# Other config values specific to each type of channel(sink or source)
+# can be defined as well
+# In this case, it specifies the capacity of the memory channel
+TwitterAgent.channels.MemChannel.transactionCapacity = 10
+
+
+
+
+Use the below, in the Linux environment:-
+****************************************
+flume-ng agent -n TwitterAgent -c conf -f /home/hdusr/flume/conf/flume.conf \
+-Dflume.root.logger=DEBUG,console
+
+17/12/26 20:01:03 INFO node.PollingPropertiesFileConfigurationProvider: Configuration provider starting
+17/12/26 20:01:03 INFO node.PollingPropertiesFileConfigurationProvider: Reloading configuration file:/home/hdusr/flume/conf/flume.conf
+17/12/26 20:01:03 INFO conf.FlumeConfiguration: Processing:HDFS
+17/12/26 20:01:03 INFO conf.FlumeConfiguration: Added sinks: HDFS Agent: TwitterAgent
+17/12/26 20:01:03 INFO conf.FlumeConfiguration: Processing:HDFS
+17/12/26 20:01:03 INFO conf.FlumeConfiguration: Post-validation flume configuration contains configuration for agents: [TwitterAgent]
+17/12/26 20:01:03 INFO node.AbstractConfigurationProvider: Creating channels
+17/12/26 20:01:03 INFO channel.DefaultChannelFactory: Creating instance of channel MemChannel type memory
+17/12/26 20:01:03 INFO node.AbstractConfigurationProvider: Created channel MemChannel
+17/12/26 20:01:03 INFO source.DefaultSourceFactory: Creating instance of source Twitter, type com.cloudera.flume.source.TwitterSource
+17/12/26 20:01:03 INFO sink.DefaultSinkFactory: Creating instance of sink: HDFS, type: hdfs
+17/12/26 20:01:04 INFO hdfs.HDFSEventSink: Hadoop Security enabled: false
+17/12/26 20:01:04 INFO node.AbstractConfigurationProvider: Channel MemChannel connected to [Twitter, HDFS]
+17/12/26 20:01:04 INFO node.Application: Starting new configuration:{ sourceRunners:{Twitter=EventDrivenSourceRunner: { source:com.cloudera.flume.source.TwitterSource{name:Twitter,state:IDLE} }} sinkRunners:{HDFS=SinkRunner: { policy:org.apache.flume.sink.DefaultSinkProcessor@2a89c4f2 counterGroup:{ name:null counters:{} } }} channels:{MemChannel=org.apache.flume.channel.MemoryChannel{name: MemChannel}} }
+17/12/26 20:01:04 INFO node.Application: Starting Channel MemChannel
+17/12/26 20:01:04 INFO instrumentation.MonitoredCounterGroup: Monitoried counter group for type: CHANNEL, name: MemChannel, registered successfully.
+17/12/26 20:01:04 INFO instrumentation.MonitoredCounterGroup: Component type: CHANNEL, name: MemChannel started
+17/12/26 20:01:04 INFO node.Application: Starting Sink HDFS
+17/12/26 20:01:04 INFO node.Application: Starting Source Twitter
+17/12/26 20:01:04 INFO instrumentation.MonitoredCounterGroup: Monitoried counter group for type: SINK, name: HDFS, registered successfully.
+17/12/26 20:01:04 INFO instrumentation.MonitoredCounterGroup: Component type: SINK, name: HDFS started
+17/12/26 20:01:04 INFO twitter4j.TwitterStreamImpl: Establishing connection.
+17/12/26 20:01:38 INFO twitter4j.TwitterStreamImpl: Connection established.
+17/12/26 20:01:38 INFO twitter4j.TwitterStreamImpl: Receiving status stream.
+17/12/26 20:01:42 INFO hdfs.HDFSDataStream: Serializer = TEXT, UseRawLocalFileSystem = false
+17/12/26 20:01:42 INFO hdfs.BucketWriter: Creating hdfs://localhost:9000/user/flume/tweets//FlumeData.1514298702829.tmp
+17/12/26 20:01:57 WARN hdfs.BucketWriter: Block Under-replication detected. Rotating file.
+17/12/26 20:01:57 INFO hdfs.BucketWriter: Renaming hdfs://localhost:9000/user/flume/tweets/FlumeData.1514298702829.tmp to hdfs://localhost:9000/user/flume/tweets/FlumeData.1514298702829
+17/12/26 20:01:57 INFO hdfs.BucketWriter: Creating hdfs://localhost:9000/user/flume/tweets//FlumeData.1514298702830.tmp
+17/12/26 20:02:02 WARN hdfs.BucketWriter: Block Under-replication detected. Rotating file.
+17/12/26 20:02:02 INFO hdfs.BucketWriter: Renaming hdfs://localhost:9000/user/flume/tweets/FlumeData.1514298702830.tmp to hdfs://localhost:9000/user/flume/tweets/FlumeData.1514298702830
+
+
+
+
+7/12/26 20:17:32 INFO instrumentation.MonitoredCounterGroup: Component type: SINK, name: HDFS stopped
+17/12/26 20:17:32 INFO instrumentation.MonitoredCounterGroup: Shutdown Metric for type: SINK, name: HDFS. sink.start.time == 1514298664737
+17/12/26 20:17:32 INFO instrumentation.MonitoredCounterGroup: Shutdown Metric for type: SINK, name: HDFS. sink.stop.time == 1514299652397
+17/12/26 20:17:32 INFO instrumentation.MonitoredCounterGroup: Shutdown Metric for type: SINK, name: HDFS. sink.batch.complete == 0
+17/12/26 20:17:32 INFO instrumentation.MonitoredCounterGroup: Shutdown Metric for type: SINK, name: HDFS. sink.batch.empty == 129
+17/12/26 20:17:32 INFO instrumentation.MonitoredCounterGroup: Shutdown Metric for type: SINK, name: HDFS. sink.batch.underflow == 67
+17/12/26 20:17:32 INFO instrumentation.MonitoredCounterGroup: Shutdown Metric for type: SINK, name: HDFS. sink.connection.closed.count == 45
+17/12/26 20:17:32 INFO instrumentation.MonitoredCounterGroup: Shutdown Metric for type: SINK, name: HDFS. sink.connection.creation.count == 45
+17/12/26 20:17:32 INFO instrumentation.MonitoredCounterGroup: Shutdown Metric for type: SINK, name: HDFS. sink.connection.failed.count == 1
+17/12/26 20:17:32 INFO instrumentation.MonitoredCounterGroup: Shutdown Metric for type: SINK, name: HDFS. sink.event.drain.attempt == 91
+17/12/26 20:17:32 INFO instrumentation.MonitoredCounterGroup: Shutdown Metric for type: SINK, name: HDFS. sink.event.drain.sucess == 91
+17/12/26 20:17:35 INFO instrumentation.MonitoredCounterGroup: Component type: CHANNEL, n	ame: MemChannel stopped
+17/12/26 20:17:35 INFO instrumentation.MonitoredCounterGroup: Shutdown Metric for type: CHANNEL, name: MemChannel. channel.start.time == 1514298664723
+17/12/26 20:17:35 INFO instrumentation.MonitoredCounterGroup: Shutdown Metric for type: CHANNEL, name: MemChannel. channel.stop.time == 1514299655456
+17/12/26 20:17:35 INFO instrumentation.MonitoredCounterGroup: Shutdown Metric for type: CHANNEL, name: MemChannel. channel.capacity == 100
+17/12/26 20:17:35 INFO instrumentation.MonitoredCounterGroup: Shutdown Metric for type: CHANNEL, name: MemChannel. channel.current.size == 0
+17/12/26 20:17:35 INFO instrumentation.MonitoredCounterGroup: Shutdown Metric for type: CHANNEL, name: MemChannel. channel.event.put.attempt == 91
+17/12/26 20:17:35 INFO instrumentation.MonitoredCounterGroup: Shutdown Metric for type: CHANNEL, name: MemChannel. channel.event.put.success == 91
+17/12/26 20:17:35 INFO instrumentation.MonitoredCounterGroup: Shutdown Metric for type: CHANNEL, name: MemChannel. channel.event.take.attempt == 287
+17/12/26 20:17:35 INFO instrumentation.MonitoredCounterGroup: Shutdown Metric for type: CHANNEL, name: MemChannel. channel.event.take.success == 91
