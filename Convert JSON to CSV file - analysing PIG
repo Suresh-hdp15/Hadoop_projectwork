@@ -1,0 +1,50 @@
+hdusr@khesh-virtual-machine:~$ hadoop fs -put /home/hdusr/Bigdata-pack/Pig-package/olympic.json /user/pigdata/input/olympic.json
+put: org.apache.hadoop.hdfs.server.namenode.SafeModeException: Cannot create /user/pigdata/input/olympic.json. Name node is in safe mode.
+hdusr@khesh-virtual-machine:~$ hadoop dfsadmin -safemode leave
+Safe mode is OFF
+hdusr@khesh-virtual-machine:~$ hadoop fs -put /home/hdusr/Bigdata-pack/Pig-package/olympic.json /user/pigdata/input/olympic.json
+
+hdusr@khesh-virtual-machine:~$ pig -x mapreduce
+
+grunt> loadjson = LOAD '/user/pigdata/input/olympic.json' USING 
+>> JsonLoader('athelte:chararray,age:int,country:chararray,
+>> year:chararray,closing:chararray,sport:chararray,
+>> gold:int,silver:int,bronze:int,total:int');
+
+grunt> describe loadjson;
+loadjson: {athelte: chararray,age: int,country: chararray,year: chararray,closing: chararray,sport: chararray,gold: int,silver: int,bronze: int,total: int}
+
+grunt> A = GROUP loadjson by sport;
+
+grunt> REGISTER /home/hdusr/Downloads/piggybank-0.12.1.jar;
+grunt> DEFINE CSVExcelStorage org.apache.pig.piggybank.storage.CSVExcelStorage();
+
+grunt> STORE loadjson INTO '/user/pigdata/output/json_2_csv' USING               
+>> org.apache.pig.piggybank.storage.CSVExcelStorage(); 
+
+Success!
+
+Job Stats (time in seconds):
+JobId	Maps	Reduces	MaxMapTime	MinMapTIme	AvgMapTime	MedianMapTime	MaxReduceTime	MinReduceTime	AvgReduceTime	MedianReducetime	Alias	Feature	Outputs
+job_201712181941_0003	1	0	7	7	7	7	n/a	n/a	n/a	n/a	loadjson	MAP_ONLY	/user/pigdata/output/json_2_csv,
+
+Input(s):
+Successfully read 20 records (3535 bytes) from: "/user/pigdata/input/olympic.json"
+
+Output(s):
+Successfully stored 20 records (1223 bytes) in: "/user/pigdata/output/json_2_csv"
+
+Counters:
+Total records written : 20
+Total bytes written : 1223
+Spillable Memory Manager spill count : 0
+Total bags proactively spilled: 0
+Total records proactively spilled: 0
+
+Job DAG:
+job_201712181941_0003
+
+
+2017-12-18 22:27:44,287 [main] INFO  org.apache.pig.backend.hadoop.executionengine.mapReduceLayer.MapReduceLauncher - Success!
+
+hdusr@khesh-virtual-machine:~$ hadoop fs -get /user/pigdata/output/json_2_csv/part-m-00000 /home/hdusr/Bigdata-pack/Pig-package/csvop.csv
