@@ -1,0 +1,17 @@
+hbase(main):002:0> scan "emp"
+ROW                                         COLUMN+CELL                                                                                                                   
+ e01                                        column=dept:loc, timestamp=1515058777252, value=maa                                                                           
+ e01                                        column=dept:name, timestamp=1515058760276, value=R&D                                                                          
+ e01                                        column=person:fname, timestamp=1515058723771, value=suresh                                                                    
+ e01                                        column=person:lname, timestamp=1515058736235, value=ram                                                                       
+ e02                                        column=dept:loc, timestamp=1515058835741, value=blr                                                                           
+ e02                                        column=dept:name, timestamp=1515058822254, value=R&D                                                                          
+ e02                                        column=person:fname, timestamp=1515058795743, value=yoga                                                                      
+ e02                                        column=person:lname, timestamp=1515058807276, value=ram    
+
+hive> create table emp_hbase(Eid string,f_name string,l_name string,salry int)              
+    > STORED BY 'org.apache.hadoop.hive.hbase.HbaseStorageHandler' with serdeproperties     
+    > ("hbase.columns.mapping"=":key,person:fname,person:lname,person:sal")                 
+    > tblproperties("hbase.table.name"="emp");                                              
+FAILED: Execution Error, return code 1 from org.apache.hadoop.hive.ql.exec.DDLTask. org.apache.hadoop.hive.ql.metadata.HiveException:
+Error in loading storage handler.org.apache.hadoop.hive.hbase.HbaseStorageHandler
