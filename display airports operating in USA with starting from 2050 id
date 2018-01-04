@@ -1,0 +1,31 @@
+COGROUP the data's with common field:
+grunt> cogroup_data = COGROUP AIRPORT by icao, AIRLINE by ICAO; 
+
+grunt> dist_data = DISTINCT AIRPORT;  ----> Distinct (It remove the duplicate datas).
+grunt> dump dist_data;
+
+Example 6:- To display airports operating in USA with starting from 2050 id:
+****************************************************************************
+grunt> AIRPORT = LOAD '/user/pigdata/input/Airports.txt' USING PigStorage ('\t') AS 
+>> (airport_id:int, name:chararray, city:chararray, iata_faa:chararray, icao:chararray,
+>> timezone:chararray);     
+ 
+                                                                 
+grunt> Describe AIRPORT;
+AIRPORT: {airport_id: int,name: chararray,city: chararray,iata_faa: chararray,icao: chararray,timezone: chararray}
+
+grunt> filter_data = FILTER AIRPORT BY airport_id >=2050;                                  
+grunt> Dump filter_data;
+
+(2050,Charlotte/Douglas International Airport,North_Carolina,USA,CLT,KCLT)
+(2051,Piedmont Triad International Airport,North_Carolina,USA,GSO,KGSO)
+(2052,Raleigh-Durham International Airport,North_Carolina,USA,RDU,KRDU)
+(2053,Wilmington International Airport,North_Carolina,USA,ILM,KILM)
+(2060,Albany International Airport,New_York,USA,ALB,KALB)
+(2061,Buffalo Niagara International Airport,New_York,USA,BUF,KBUF)
+(2062,John F. Kennedy International Airport,New_York,USA,JFK,KJFK)
+(2063,Stewart International Airport,New_York,USA,SWF,KSWF)
+(2064,Niagara Falls International Airport,New_York,USA,IAG,KIAG)
+(2065,Plattsburgh International Airport,New_York,USA,PBG,KPBG)
+(2066,Greater Rochester International Airport,New_York,USA,ROC,KROC)
+(2067,Syracuse Hancock International Airport,New_York,USA,SYR,KSYR)
