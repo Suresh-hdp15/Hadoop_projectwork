@@ -1,0 +1,6 @@
+hbase(main):017:0> create 'bestseller',{NAME=>'CATEGORY'}, {NAME=>'FORMAT'},{NAME=>'PRICE'},{NAME=>'INTEREST_AGE'},{NAME=>'AUTHOR'},{NAME=>'PUBLISHER'},{NAME=>'LANGUAGE'},{NAME=>'GEO_REGION'},{NAME=>'EDU_QUALIFICATION'}, {NAME=>'SELLER_PLACE'} 
+0 row(s) in 1.2550 seconds
+
+hbase(main):018:0> describe 'bestseller'
+DESCRIPTION                               
+
