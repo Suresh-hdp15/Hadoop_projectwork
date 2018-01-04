@@ -29,5 +29,17 @@ Safe mode is ON
 hdusr@khesh-virtual-machine:~$ hadoop dfsadmin -safemode leave
 Safe mode is OFF
 
+Bug 4:
+grunt> filter_data = FILTER AIRPORT BY airport_id >=2050;  
+2017-01-04 13:02:28,687 [main] ERROR org.apache.pig.tools.grunt.Grunt - ERROR 1039: 
+<line 5, column 43> In alias filter_data, incompatible types in GreaterThanEqual Operator left hand side:chararray right hand side:int
+Details at logfile: /home/hdusr/pig_1515047626010.log
+
+Solution:
+Declared as chararray for airport_id field, but it requires as int becasue the airport_id contains numeric data.
+
+grunt> AIRPORT = LOAD '/user/pigdata/input/Airports.txt' USING PigStorage ('\t') AS 
+>> (airport_id:int, name:chararray, city:chararray, iata_faa:chararray, icao:chararray,
+>> timezone:chararray); 
 
 
