@@ -1,0 +1,199 @@
+''' Program make a Airline record Add/Search/Delete in a file '''
+import csv
+import sys
+
+'' #Writing the Passenger record in the file# ''
+def pax(p1,s1,p2,s2,s3):
+     f= open("E:\Bigdata profile\python\Miniproject\Paxrecord.txt","a+")
+     f.write('%d'  %p1 + ',' '%s'  %s1 + ',' '%d'  %p2 + ',' '%s'  %s2 + ',' '%s'  %s3 + '\n')
+     f.close()
+     
+'' #Writing the Passenger_Flight record in the file# ''
+def flight(p1,f1,s1,s2,s3,s4,s5):
+     f= open("E:\Bigdata profile\python\Miniproject\Flightrecord.txt","a+")
+     f.write('%d'  %p1 + ',' '%d'  %f1 + ',' '%s'  %s1 + ',' '%s'  %s2 + ',' '%s'  %s3 + ',' '%s'  %s4 + ',' '%s' %s5 + '\n')
+     f.close()
+     
+'' #Searching the Passenger record with Read operation in the file# ''
+def srchpax(pax1):
+    srch = open('E:\Bigdata profile\python\Miniproject\Paxrecord.txt',"r+")
+    csvReader = csv.reader(srch)
+    header = next(csvReader)
+    paxnumIndex = header.index("PaxNumber")
+    paxnamIndex = header.index("PaxName")
+    paxageIndex = header.index("PaxAge")
+    paxgenIndex = header.index("Gendertype")
+    paxcityIndex = header.index("City")
+     
+    Paxlist = []
+    for row in csvReader:
+            PaxNumber = row[paxnumIndex]
+            PaxName = row[paxnamIndex]
+            PaxAge = row[paxageIndex]
+            Gendertype = row[paxgenIndex]
+            City = row[paxcityIndex]
+            Paxlist.append([PaxNumber,PaxName,PaxAge,Gendertype,City])
+            paxdef = 1000
+            for i, item in enumerate(Paxlist):
+                      if int(PaxNumber) == pax1:
+                         j = int(PaxNumber) - paxdef
+                         i = j
+                         print(Paxlist[i])
+                         break
+    srch.close()
+
+'' #Searching the Passenger_Flight record with Read operation in the file# ''
+def srchflght(pax2):
+    srchflght = open('E:\Bigdata profile\python\Miniproject\Flightrecord.txt',"r+")
+    csvReader = csv.reader(srchflght)
+    header = next(csvReader)
+    paxnumIndex = header.index("PaxNumber")
+    fltnumIndex = header.index("FltNumber")
+    fltcodeIndex = header.index("Fltcode")
+    flttvlIndex = header.index("Tvldate")
+    cosIndex = header.index("COS")
+    ognIndex = header.index("Origin")
+    destnIndex = header.index("Destn")
+     
+    Fltlist = []
+    for row in csvReader:
+            PaxNumber = row[paxnumIndex]
+            FltNumber = row[fltnumIndex]
+            Fltcode = row[fltcodeIndex]
+            Tvldate = row[flttvlIndex]
+            COS = row[cosIndex]
+            Origin = row[ognIndex]
+            Destn = row[destnIndex]
+            Fltlist.append([PaxNumber,FltNumber,Fltcode,Tvldate,COS,Origin,Destn])
+            paxdef = 1000
+            for i, item in enumerate(Fltlist):
+                      if int(PaxNumber) == pax2:
+                         j = int(PaxNumber) - paxdef
+                         i = j
+                         print(Fltlist[i])
+                         break
+    srchflght.close()
+
+'' #Deleting the Passenger record with Del operation and writing in the output file# ''
+def delpax(pax3):
+    delpax = open('E:\Bigdata profile\python\Miniproject\Paxrecord.txt',"r")
+    csvReader = csv.reader(delpax)
+    header  = next(csvReader)
+    paxnumIndex = header.index("PaxNumber")
+    paxnamIndex = header.index("PaxName")
+    paxageIndex = header.index("PaxAge")
+    paxgenIndex = header.index("Gendertype")
+    paxcityIndex = header.index("City")
+    delepax = []
+    for row in csvReader:
+            PaxNumber = row[paxnumIndex]
+            PaxName = row[paxnamIndex]
+            PaxAge = row[paxageIndex]
+            Gendertype = row[paxgenIndex]
+            City = row[paxcityIndex]
+            delepax.append([PaxNumber,PaxName,PaxAge,Gendertype,City])
+            paxdef = 1000
+            p1 = int(PaxNumber)
+            p2 = str(PaxName)
+            p3 = int(PaxAge)
+            p4 = str(Gendertype)
+            p5 = str(City)
+            print (p1,p2,p3,p4,p5)
+            for x, item in enumerate(delepax):
+                if int(p1) == pax3:
+                    y = int(p1) - paxdef
+                    x = y
+                    del delepax[x]
+                    print (delepax)
+                    fl_write = open("E:\Bigdata profile\python\Miniproject\Paxoutput.txt", 'a+')
+                    fl_write.write('%d'  %p1 + ',' '%s'  %p2 + ',' '%d'  %p3 + ',' '%s'  %p4 + ',' '%s'  %p5 + '\n')
+                    fl_write.close()
+                    break
+    delpax.close()    
+
+'' #Deleting the Passenger_Flight record with Del operation and writing in the output file# ''
+def delflt(pax4):
+    delflt = open('E:\Bigdata profile\python\Miniproject\Flightrecord.txt',"r")
+    csvReader = csv.reader(delflt)
+    header = next(csvReader)
+    paxnumIndex = header.index("PaxNumber")
+    fltnumIndex = header.index("FltNumber")
+    fltcodeIndex = header.index("Fltcode")
+    flttvlIndex = header.index("Tvldate")
+    cosIndex = header.index("COS")
+    ognIndex = header.index("Origin")
+    destnIndex = header.index("Destn")
+     
+    deleflt = []
+    for row in csvReader:
+            PaxNumber = row[paxnumIndex]
+            FltNumber = row[fltnumIndex]
+            Fltcode = row[fltcodeIndex]
+            Tvldate = row[flttvlIndex]
+            COS = row[cosIndex]
+            Origin = row[ognIndex]
+            Destn = row[destnIndex]
+            deleflt.append([PaxNumber,FltNumber,Fltcode,Tvldate,COS,Origin,Destn])
+            paxdef = 1000
+            p1 = int(PaxNumber)
+            p2 = int(FltNumber)
+            p3 = str(Fltcode)
+            p4 = str(Tvldate)
+            p5 = str(COS)
+            p6 = str(Origin)
+            p7 = str(Destn)
+            print (p1,p2,p3,p4,p5,p6,p7)
+            for x, item in enumerate(deleflt):
+                if int(p1) == pax4:
+                    y = int(p1) - paxdef
+                    x = y
+                    del deleflt[x]
+                    print (deleflt)
+                    f2_write = open("E:\Bigdata profile\python\Miniproject\Fltoutput.txt", 'a+')
+                    f2_write.write('%d'  %p1 + ',' '%d'  %p2 + ',' '%s'  %p3 + ',' '%s'  %p4 + ',' '%s'  %p5 + ',' '%s'  %p6 + ',' '%s' %p7 + '\n')
+                    f2_write.close()
+                    break
+    delflt.close()    
+
+'' #Enter the Choice # ''
+print("Select operation.")
+print("1.Add Pax information")
+print("2.Add Flight information")
+print("3.Search Pax information")
+print("4.Search Flight information")
+print("5.Delete Pax information")
+print("6.Delete Flight information")
+
+# Take input from the user 
+choice = input("Enter choice(1/2/3/4/5/6):")
+
+if choice == '1':
+    n1 = int(input("Enter Pax Number: "))
+    s1 = str(input("Enter Pax Name: "))
+    n2 = int(input("Enter Pax Age: "))
+    s2 = str(input("Enter Gender type: "))
+    s3 = str(input("Enter City: "))
+    pax (n1,s1,n2,s2,s3)
+elif choice == '2':
+    pax1 = int(input("Enter Pax Number: "))
+    num1 = int(input("Enter Flight Number: "))
+    str1 = str(input("Enter Flight code: "))
+    str2 = str(input("Enter Travel date: "))
+    str3 = str(input("Enter Class of service: "))
+    str4 = str(input("Enter Origin: "))
+    str5 = str(input("Enter Destination: "))
+    flight (pax1,num1,str1,str2,str3,str4,str5)
+elif choice == '3':
+    p1 = int(input("Enter Pax Number to display Pax records: "))
+    srchpax (p1)
+elif choice == '4':
+    p2 = int(input("Enter Pax Number to display Flight records: "))
+    srchflght(p2)
+elif choice == '5':
+    p3 = int(input("Enter Pax Number to delete Pax records: "))
+    delpax(p3)
+elif choice == '6':
+    p4 = int(input("Enter Pax Number to delete Pax_Flight records: "))
+    delflt(p4)
+else:
+   print("Invalid input")
